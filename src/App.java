@@ -1,6 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+// import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +15,8 @@ public class App {
             Connection connection = DriverManager.getConnection(url, user, password);
             System.out.println("Connection successful");
 
-            createAnEmployee(connection);
+            // createAnEmployee(connection);
+            deleteAnEmployee(connection);
             getAllEmployees(connection);
 
             connection.close();
@@ -61,6 +62,22 @@ public class App {
                 System.out.println("Employee created sucessfully");
             } else {
                 System.err.println("Insertion failed");
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+    }
+
+    public static void deleteAnEmployee(Connection connection) {
+        try {
+            Statement statement = connection.createStatement();
+            String deleteQuery = "DELETE FROM employees WHERE id = 4";
+            int rowsAffected = statement.executeUpdate(deleteQuery);
+            if (rowsAffected > 0) {
+                System.out.println("Employee deleted sucessfully");
+            } else {
+                System.err.println("Deletion failed");
             }
             statement.close();
         } catch (SQLException e) {
