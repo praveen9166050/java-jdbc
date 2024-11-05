@@ -16,7 +16,8 @@ public class App {
             System.out.println("Connection successful");
 
             // createAnEmployee(connection);
-            deleteAnEmployee(connection);
+            // deleteAnEmployee(connection);
+            updateAnEmployee(connection);
             getAllEmployees(connection);
 
             connection.close();
@@ -78,6 +79,22 @@ public class App {
                 System.out.println("Employee deleted sucessfully");
             } else {
                 System.err.println("Deletion failed");
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+    }
+
+    public static void updateAnEmployee(Connection connection) {
+        try {
+            Statement statement = connection.createStatement();
+            String updateQuery = "UPDATE employees SET salary = 70000 WHERE id = 2";
+            int rowsAffected = statement.executeUpdate(updateQuery);
+            if (rowsAffected > 0) {
+                System.out.println("Employee updated sucessfully");
+            } else {
+                System.err.println("Updation failed");
             }
             statement.close();
         } catch (SQLException e) {
