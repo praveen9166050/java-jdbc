@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+// import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,9 +15,16 @@ public class App {
             Connection connection = DriverManager.getConnection(url, user, password);
             System.out.println("Connection successful");
 
+            getAllEmployees(connection);
+        } catch (SQLException e) {
+            System.out.println("Connection failed: " + e.getMessage());
+        }
+    }
+
+    public static void getAllEmployees(Connection connection) {
+        try {
             Statement statement = connection.createStatement();
             String query = "SELECT * FROM EMPLOYEES";
-
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 System.out.println("==================================================");
@@ -26,7 +34,7 @@ public class App {
                 System.out.println("Salary: " + resultSet.getDouble("salary"));
             }
         } catch (SQLException e) {
-            System.out.println("Connection failed: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }
