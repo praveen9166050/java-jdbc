@@ -39,6 +39,7 @@ public class HotelReservationSystem {
                         updateReservation(connection, scanner);
                         break;
                     case 5:
+                        deleteReservation(connection, scanner);
                         break;
                     case 6:
                         break;
@@ -158,6 +159,32 @@ public class HotelReservationSystem {
                     System.out.println("Reservation updated successfully!");
                 } else {
                     System.out.println("Reservation update failed.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void deleteReservation(Connection connection, Scanner scanner) {
+        try {
+            System.out.print("Enter reservation ID to delete: ");
+            int reservationId = scanner.nextInt();
+
+            if (!reservationExists(connection, reservationId)) {
+                System.out.println("Reservation not found for the given ID.");
+                return;
+            }
+
+            String sql = "DELETE FROM reservations WHERE reservation_id = " + reservationId;
+
+            try (Statement statement = connection.createStatement()) {
+                int affectedRows = statement.executeUpdate(sql);
+
+                if (affectedRows > 0) {
+                    System.out.println("Reservation deleted successfully!");
+                } else {
+                    System.out.println("Reservation deletion failed.");
                 }
             }
         } catch (SQLException e) {
