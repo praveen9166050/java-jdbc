@@ -22,7 +22,7 @@ public class HotelReservationSystem {
                 System.out.println("4. Update reservations");
                 System.out.println("5. Delete reservations");
                 System.out.println("6. Exit");
-                System.out.println("Choose an option: ");
+                System.out.print("Choose an option: ");
                 Scanner scanner = new Scanner(System.in);
                 int choice = scanner.nextInt();
                 switch (choice) {
@@ -43,7 +43,8 @@ public class HotelReservationSystem {
                         break;
                     case 6:
                         exit();
-                        break;
+                        scanner.close();
+                        return;
                     default:
                         System.out.println("Invalid choice. Try again.");
                 }
@@ -212,7 +213,7 @@ public class HotelReservationSystem {
     }
 
     public static void exit() throws InterruptedException {
-        System.out.print("Exiting system...");
+        System.out.print("Exiting system");
         int i = 5;
         while (i != 0) {
             System.out.print(".");
