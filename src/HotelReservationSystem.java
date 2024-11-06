@@ -6,7 +6,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class HotelReservationSystem {
-    private static final String url = "jdbc:mysql://localhost:3306/employees";
+    private static final String url = "jdbc:mysql://localhost:3306/hotel_db";
     private static final String user = "root";
     private static final String password = "2024";
 
@@ -36,6 +36,7 @@ public class HotelReservationSystem {
                         getRoomNumber(connection, scanner);
                         break;
                     case 4:
+                        updateReservation(connection, scanner);
                         break;
                     case 5:
                         break;
@@ -124,6 +125,59 @@ public class HotelReservationSystem {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void updateReservation(Connection connection, Scanner scanner) {
+        try {
+            System.out.print("Enter reservation ID to update: ");
+            int reservationId = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            if (!reservationExists(connection, reservationId)) {
+                System.out.println("Reservation not found for the given ID.");
+                return;
+            }
+
+            System.out.print("Enter new guest name: ");
+            String newGuestName = scanner.nextLine();
+            System.out.print("Enter new room number: ");
+            int newRoomNumber = scanner.nextInt();
+            System.out.print("Enter new contact number: ");
+            String newContactNumber = scanner.next();
+
+            String sqlQuery = "UPDATE reservations SET guest_name = '" + newGuestName + "', " +
+                    "room_number = " + newRoomNumber + ", " +
+                    "contact_number = '" + newContactNumber + "' " +
+                    "WHERE reservation_id = " + reservationId;
+
+            try (Statement statement = connection.createStatement()) {
+                int affectedRows = statement.executeUpdate(sqlQuery);
+
+                if (affectedRows > 0) {
+                    System.out.println("Reservation updated successfully!");
+                } else {
+                    System.out.println("Reservation update failed.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean reservationExists(Connection connection, int reservationId) {
+        try {
+            String sqlQuery = "SELECT reservation_id FROM reservations WHERE reservation_id = " + reservationId;
+
+            try (
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sqlQuery);
+            ) {
+                return resultSet.next(); // If there's a result, the reservation exists
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Handle database errors as needed
         }
     }
 }
