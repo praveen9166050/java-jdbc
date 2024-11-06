@@ -42,6 +42,7 @@ public class HotelReservationSystem {
                         deleteReservation(connection, scanner);
                         break;
                     case 6:
+                        exit();
                         break;
                     default:
                         System.out.println("Invalid choice. Try again.");
@@ -49,6 +50,8 @@ public class HotelReservationSystem {
             }
         } catch (SQLException e) {
             System.out.println("SQL Error: " + e.getMessage());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -206,5 +209,17 @@ public class HotelReservationSystem {
             e.printStackTrace();
             return false; // Handle database errors as needed
         }
+    }
+
+    public static void exit() throws InterruptedException {
+        System.out.print("Exiting system...");
+        int i = 5;
+        while (i != 0) {
+            System.out.print(".");
+            Thread.sleep(1000);
+            i--;
+        }
+        System.out.println();
+        System.out.println("Thankyou for using Hotel Reservation System!!!");
     }
 }
